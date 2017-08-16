@@ -6,49 +6,55 @@ use Authenticate\Contracts\UserManager;
 
 /**
  * Class Session
- * @package Authenticate\Surveys\Session
+ * @package Authenticate\Session
  */
 abstract class Session
 {
     /**
-     * Mantiene el identificador del usuario
-     * en la cookie de sesion.
+     * Capture the instance of logged-in user.
      *
-     * @var null
+     * @var UserManager
      */
     protected static $user = null;
 
     /**
-     * Entidad/Modelo sobre el cual se realice
-     * la busqueda del usuario autenticado.
+     * Define the timeout default for session in seconds.
      *
-     * @var null
+     * @var int
      */
-    protected static $entity = null;
+    private static $sessionTimeOut = 1800;
 
     /**
-     * Configura los parametros necesarios para
-     * poder arrancar una sesion.
+     * Return the value default timeout for session.
+     *
+     * @return int
+     */
+    private static function getTimeout()
+    {
+        return static::$sessionTimeOut;
+    }
+
+    /**
+     * Setting parameters necessary for start a session.
      */
     public static function setSession()
     {
-        // Capturamos de la constante el tiempo de vida que tendra la sesion
-        // En caso de que no se haya configurado la constante necesitada
-        // se define por defecto que el tiempo de espera sea de 30 min.
-        $sessionTimeOut = defined('SessionTimeout') ? constant('SessionTimeout') : 1800;
+        // We verify that exist define a constant with the value of the timeout session.
+        // If this value nothing defined in a constant then we load the constant predefined in the class.
+        $sessionTimeOut = defined('SessionTimeout') ? constant('SessionTimeout') : static::getTimeout();
 
-        // Configuramos el tiempo que el servidor debe mantener los datos.
+        // Setting session timeout in that should the server maintenance the data.
         ini_set('session.gc_maxlifetime', $sessionTimeOut);
 
-        // Tiempo de vida de la cookie en el navegador.
+        // Timeout the cookie in browser.
         ini_set('session.cookie_lifetime', $sessionTimeOut);
 
-        // Configuramos el tiempo de vida del id de sesion.
+        // Setting time life of session id.
         session_set_cookie_params($sessionTimeOut);
     }
 
     /**
-     * Inicia la sesion.
+     * Start session.
      */
     public static function start()
     {
@@ -56,108 +62,83 @@ abstract class Session
     }
 
     /**
-     * Registra el identificador del usuario
-     * en la sesion inciada.
+     * Return a UserManager instance when exist
+     * a user logged.
      *
-     * @param mixed $user
+     * @param UserManager $user
      */
-    public final static function registerUser($user)
+    public final static function registerUser(UserManager $user)
     {
-        $_SESSION['uid'] = $user->id;
+        $_SESSION['user'] = $user;
     }
 
     /**
-     * Devuelve el identificador del usuario
-     * guardado.
+     * Return content of the postion "user" in the global
+     * array $_SESSION where is save a instance
+     * UserManager.
      *
-     * @return mixed
+     * @return UserManager
      */
-    protected static function uid()
+    protected static function getUser()
     {
-        return $_SESSION['uid'];
+        return $_SESSION['user'];
     }
 
     /**
-     * Carga una entidad de usuario.
+     * Return the user logged.
      *
-     * @return mixed
-     */
-    protected function loadUser()
-    {
-        /** @var UserManager $entity */
-        $entity = static::$entity;
-
-        return static::$user = $entity::find(static::uid());
-    }
-
-    /**
-     * Setea la entidad en la cual se haran las
-     * busquedas para usuarios.
-     *
-     * @param UserManager $manager
-     */
-    public static function setEntity(UserManager $manager = null)
-    {
-        static::$entity = $manager;
-    }
-
-    /**
-     * Devuelve el usuario registrado para la sesion.
-     *
-     * @return mixed
+     * @return UserManager
      */
     public static function user()
     {
-        is_null(static::$user) && static::loadUser();
+        is_null(static::$user) && static::getUser();
 
         return static::$user;
     }
 
     /**
-     * Verifica que exista un usuario autenticado.
+     * Check if a registered user exists.
      *
      * @return bool
      */
     public static function auth()
     {
-        // Traemos el registrado.
-        $user = static::user();
-
-        // Verificamos que realmente exista algo.
-        return !empty($user->id);
+        return static::user() instanceof UserManager;
     }
 
     /**
-     * Finaliza la sesion y la cookie correspondiente.
+     * End current session and the cookie of
+     * the user signed.
      */
     public static function close()
     {
-        // Si existe una cookie la borramos.
+        // If exist a cookie configured, we destroy it.
         if (ini_get("session.use_cookies")) {
-            // Capturamos los parametros de la cookie.
+            // Capture the parameters of the cookie.
             $params = session_get_cookie_params();
 
-            // Borramos todos los contenidos de la cookie.
+            // Delete all content the cookie and the session.
             setcookie(session_name(), '', time() - 42000,
                 $params["path"], $params["domain"],
                 $params["secure"], $params["httponly"]
             );
         }
 
-        // Y finalmente destruimos la sesion.
+        // And finally destroy session.
         session_destroy();
     }
 
     /**
-     * Cierra cualquier sesion abierta
-     * para iniciar una nueva.
+     * End any session open and clear all
+     * trace of the $_SESSION var for
+     * start again.
      */
     public static function purge()
     {
-        // Cerramos cualquier sesion abierta.
+        // Close any session open.
         static::close();
 
-        // Configuramos e iniciamos nuevamente.
+        // Setting all again.
         static::setSession();
         static::start();
     }

@@ -1,0 +1,32 @@
+{
+  "name": "jmrg/Authenticate",
+  "description": "Library for authentication.",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mauricio Reina",
+      "email": "mauricio.reina.gabela@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "php": ">=5.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Authenticate\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "classmap": [
+      "tests/BaseCase.php"
+    ]
+  },
+  "config": {
+    "secure-http": false
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.8.x-dev"
+  }
+}

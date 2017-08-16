@@ -1,0 +1,9 @@
+.idea
+/vendor
+/node_modules
+Homestead.yaml
+Homestead.json
+.env
+*.ini
+composer.lock
+/storage/*

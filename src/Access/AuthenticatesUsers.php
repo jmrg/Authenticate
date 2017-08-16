@@ -97,10 +97,10 @@ trait AuthenticatesUsers
         // con el parametro.
         /** @var UserManager $entity */
         $entity = static::$entity;
-        $user = $entity::buscar([$this->loginUsername() => $user])->first();
+        $user = $entity::getUserBylLoginUsername([$this->loginUsername(), $user]);
 
         // En caso de que no exista devolvemos una excepcion.
-        if (!$user->id)
+        if (!($user instanceof UserManager))
             throw new AuthorizeExceptions('El usuario no existe.');
 
         return $user;

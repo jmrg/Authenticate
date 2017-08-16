@@ -13,9 +13,7 @@ use Authenticate\Contracts\Views;
  * o tenga autorizacion para acceder a
  * otros controladores o metodos.
  *
- * @package Authenticate\Surveys\Core\Session
- *
- * @property \Input Input
+ * @package Authenticate\Core\Session
  */
 abstract class Authorize implements Views
 {
@@ -62,7 +60,6 @@ abstract class Authorize implements Views
         // Configuracion de la entidad de Usuario
         // para las clases que la utilizaran.
         $this->setEntity($user);
-        Session::setEntity($user);
     }
 
     /**
@@ -125,8 +122,7 @@ abstract class Authorize implements Views
     }
 
     /**
-     * Verifica los datos para realziar
-     * el logueo.
+     * Verify data to login.
      *
      * @return void
      */

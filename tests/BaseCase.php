@@ -1,10 +1,10 @@
 <?php
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Faker\Factory as Faker;
+use PHPUnit_Framework_TestCase as TestCase;
 
 /**
- * Class BaseCase
+ * Class BaseCase.
  *
  * Base class for unit testing if you have some doubts please read the next sentences
  * With some random data
@@ -16,7 +16,7 @@ use Faker\Factory as Faker;
 abstract class BaseCase extends TestCase
 {
     /**
-     * Faker data library
+     * Faker data library.
      *
      * @var \Faker\Generator|null
      */
@@ -29,7 +29,7 @@ abstract class BaseCase extends TestCase
     }
 
     /**
-     * Gets the Faker library
+     * Gets the Faker library.
      *
      * @return BaseCase
      */

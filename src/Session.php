@@ -5,8 +5,7 @@ namespace Authenticate;
 use Authenticate\Contracts\UserManager;
 
 /**
- * Class Session
- * @package Authenticate\Session
+ * Class Session.
  */
 abstract class Session
 {
@@ -67,7 +66,7 @@ abstract class Session
      *
      * @param UserManager $user
      */
-    public final static function registerUser(UserManager $user)
+    final public static function registerUser(UserManager $user)
     {
         $_SESSION['user'] = $user;
     }
@@ -113,14 +112,14 @@ abstract class Session
     public static function close()
     {
         // If exist a cookie configured, we destroy it.
-        if (ini_get("session.use_cookies")) {
+        if (ini_get('session.use_cookies')) {
             // Capture the parameters of the cookie.
             $params = session_get_cookie_params();
 
             // Delete all content the cookie and the session.
             setcookie(session_name(), '', time() - 42000,
-                $params["path"], $params["domain"],
-                $params["secure"], $params["httponly"]
+                $params['path'], $params['domain'],
+                $params['secure'], $params['httponly']
             );
         }
 

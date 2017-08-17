@@ -11,7 +11,7 @@ trait AuthenticatesUsers
     use Request;
 
     /**
-     * Carga la vista de login.
+     * Load view login.
      */
     public function showLoginForm()
     {
@@ -19,36 +19,35 @@ trait AuthenticatesUsers
     }
 
     /**
-     * Devuelve el path relativo de la vista
-     * de login.
+     * Return relative path to view login.
      *
      * @return bool|string
      */
     public function pathLoginView()
     {
-        // Verificamos que el atributo $loginView se
-        // encuentre definido para retornarlo
-        if (property_exists($this, 'loginView'))
+        // Verify we the property $loginView is defined for return.
+        if (property_exists($this, 'loginView')) {
             return $this->loginView;
+        }
 
-        // De no estarlo imprimimos un error a nivel de usuario.
-        trigger_error('Debe definir la propiedad $loginView con el path de login.', E_USER_ERROR);
+        // If not, display error.
+        trigger_error('Must define $loginView with path of login.', E_USER_ERROR);
 
         return false;
     }
 
     /**
-     * Devuelve los campos necesarios para
-     * realizar un login.
+     * Return the fields necessary for
+     * make login.
      *
      * @return array
      */
     protected function getCredentials()
     {
-        // Capturamos los parametros del request.
+        // Capture the params of request.
         $request = $this->getParamsRequest();
 
-        //  Capturamos el login y el password.
+        // Then return parameters username and password.
         return [
             $this->loginUsername() => $request[$this->loginUsername()],
             'password'             => $request['password'],
@@ -56,77 +55,84 @@ trait AuthenticatesUsers
     }
 
     /**
-     * Logea con los parametros de usuario y
-     * contraseña recibidos.
+     * Verify the credentials at th
+     * moment make login.
      *
      * @param array $credentials
+     *
      * @return void
      */
     private function hasValidCredentials(array $credentials = [])
     {
         try {
-            // Verificamos el usuario y el password.
+            // Verify exist user through username.
             $user = $this->validateUser($credentials[$this->loginUsername()]);
             $this->validatePassword($user, $credentials['password']);
 
-            // Segistramos el usuario.
+            // Register the user when exist.
             Session::registerUser($user);
 
-            // Redireccionamos al escritorio del proyecto.
+            // Redirecting the desktop to project.
             $this->redirect($this->redirectPath());
         } catch (AuthorizeExceptions $e) {
-            // En caso de error capturamos la excepcion y
-            // Y devolvemos la vista de login con
-            // el error
+            // In case error we capture exception
+            // and return the login view with
+            // message error.
             $this->handlerException($e);
             exit();
         }
     }
 
     /**
-     * Devuelve el resultado de la busqueda de la Preinscripcion
-     * a travez del token.
+     * Validate if exist of the user.
      *
      * @param string $user
-     * @return mixed
+     *
      * @throws AuthorizeExceptions
+     *
+     * @return mixed
      */
-    public final function validateUser($user)
+    final public function validateUser($user)
     {
-        // Cargamos la entidad y realizamos la busqueda
-        // con el parametro.
+        // We loaded the entity that implement UserManager
+        // interface for make a search.
         /** @var UserManager $entity */
         $entity = static::$entity;
         $user = $entity::getUserBylLoginUsername([$this->loginUsername(), $user]);
 
-        // En caso de que no exista devolvemos una excepcion.
-        if (!($user instanceof UserManager))
-            throw new AuthorizeExceptions('El usuario no existe.');
+        // In case the nothing exist user return a exception.
+        if (!($user instanceof UserManager)) {
+            throw new AuthorizeExceptions('The user not exist.');
+        }
 
         return $user;
     }
 
     /**
-     * Verifica el password para el usuario
-     * encontrado.
+     * Verify if password supplied is coincident
+     * with the user password .
      *
      * @param $user
      * @param $pass
-     * @return bool
+     *
      * @throws AuthorizeExceptions
+     *
+     * @return bool
      */
     public function validatePassword($user, $pass)
     {
-        if ($user->password != $this->hash($pass))
+        if ($user->password != $this->hash($pass)) {
             throw new AuthorizeExceptions('Password incorrecta.');
+        }
 
         return true;
     }
 
     /**
-     * Convierte un string en un hash.
+     * Return the argument supplied as hash.
      *
      * @param string $string
+     *
      * @return string
      */
     protected function hash($string)
@@ -135,26 +141,26 @@ trait AuthenticatesUsers
     }
 
     /**
-     * Retorna el path a donde debe ser redireccionado
-     * el sitio luego del login.
+     * Return the path where should after
+     * login correctly.
      *
      * @return string
      */
     public function redirectPath()
     {
-        if (property_exists($this, 'redirectPath'))
+        if (property_exists($this, 'redirectPath')) {
             return $this->redirectPath;
+        }
 
         return $this->redirectTo;
     }
 
     /**
-     * Maneja una vista para mostrar los errores
-     * que se puedan dar.
+     * Manager the view to show errors.
      *
      * @param AuthorizeExceptions|false $e
      */
-    protected final function handlerException(AuthorizeExceptions $e = null)
+    final protected function handlerException(AuthorizeExceptions $e = null)
     {
         $this->view(
             $this->pathLoginView(),
@@ -163,20 +169,20 @@ trait AuthenticatesUsers
     }
 
     /**
-     * Devuelve el nombre del campo login utilizado
-     * para el controlador.
+     * Return field name for login.
      *
      * @return string
      */
     public function loginUsername()
     {
-        return property_exists($this, 'username') ? $this->username : 'email';
+        return property_exists($this, 'username') ?
+            $this->username : 'email';
     }
 
     /**
-     * Cierra cualquier sesion abierta y nos
-     * envia a la vista de login o cualquier
-     * path configurado.
+     * Close the session for after send
+     * the view login or any others
+     * defined.
      */
     public function logout()
     {
@@ -186,9 +192,8 @@ trait AuthenticatesUsers
     }
 
     /**
-     * Devuelve el path configurado para
-     * redireccionar despues de realizar
-     * el logout.
+     * Return the path defined for redirect
+     * after login.
      *
      * @return string
      */

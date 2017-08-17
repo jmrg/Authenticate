@@ -5,11 +5,11 @@ namespace Authenticate\Contracts;
 interface Views
 {
     /**
-     * Carga una vista
+     * Load a view or template through path and send the data.
      *
-     * @param null $view
+     * @param null  $view
      * @param array $data
-     * @param bool $capture
+     * @param bool  $capture
      */
     public function view($view = null, array $data = [], $capture = false);
 }

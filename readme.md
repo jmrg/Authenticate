@@ -1,7 +1,11 @@
-## Documentation
+## Authenticate
 
-Library for authentication.
+This repositoriy contains the methods necesaries for make verification of a user through the a username and a password.
 
-### License
+The methods princpals for authentication can extended for change parameters of login among others.
 
-Authenticate is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+### Installing
+
+Installing library  can be done through various methos, although Composer is recomended.
+
+### Documentation.

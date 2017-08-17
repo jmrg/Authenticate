@@ -15,32 +15,36 @@ use Faker\Factory as Faker;
  */
 abstract class BaseCase extends TestCase
 {
-	/**
-	 * Faker data library
-	 *
-	 * @var \Faker\Generator|null
-	 */
-	protected $faker = null;
+    /**
+     * Faker data library
+     *
+     * @var \Faker\Generator|null
+     */
+    protected $faker = null;
 
-	public function __construct($name = null, array $data = [], $dataName = ''){
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
         parent::__construct($name, $data, $dataName);
         $this->setFaker();
     }
 
     /**
-	 * Gets the Faker library
-	 *
-	 * @return BaseCase
-	 */
-	public function setFaker(){
-		!$this->faker && ($this->faker = Faker::create());
+     * Gets the Faker library
+     *
+     * @return BaseCase
+     */
+    public function setFaker()
+    {
+        !$this->faker && ($this->faker = Faker::create());
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public static function setUpBeforeClass(){
-	}
+    public static function setUpBeforeClass()
+    {
+    }
 
-	public static function tearDownAfterClass(){
-	}
+    public static function tearDownAfterClass()
+    {
+    }
 }

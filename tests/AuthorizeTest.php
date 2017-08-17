@@ -9,3 +9,4 @@ class AuthorizeTest extends BaseCase
 {
     // ...
 }
+

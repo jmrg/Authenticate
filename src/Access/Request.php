@@ -5,8 +5,8 @@ namespace Authenticate\Access;
 trait Request
 {
     /**
-     * Devuelve el tipo de peticion que se
-     * ha recibo el servidor.
+     * Return the request type that
+     * has received server.
      *
      * @return string
      */
@@ -16,9 +16,8 @@ trait Request
     }
 
     /**
-     * Devuelve el contenido de la variable
-     * global correspondiente al metodo
-     * request recibido.
+     * Return the global variable correspondent
+     * the method HTTP.
      *
      * @return array
      */
@@ -26,12 +25,11 @@ trait Request
     {
         // Obtenemos el request a travez de la variable GLOBALS
         // junto con el verbo de comunicación.
-        return $GLOBALS['_' . $this->getRequestMethod()];
+        return $GLOBALS['_'.$this->getRequestMethod()];
     }
 
     /**
-     * Verifica que el metodo de comunicacion
-     * sea GET.
+     * It verify method HTTP is GET.
      *
      * @return bool
      */
@@ -41,8 +39,7 @@ trait Request
     }
 
     /**
-     * Verifica que el metodo de comunicacion
-     * sea POST.
+     * It verify method HTTP is POST.
      *
      * @return bool
      */
@@ -52,8 +49,7 @@ trait Request
     }
 
     /**
-     * Devuelve la url de la ultima peticion
-     * realizada.
+     * Return last URL executed.
      *
      * @return string
      */
@@ -63,17 +59,17 @@ trait Request
     }
 
     /**
-     * Devuelve el protocolo utilizado para el servidor.
+     * Return the protocol HTTP implement at server.
      *
      * @return string
      */
     protected function getProtocol()
     {
-        return !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? "https://" : "http://";
+        return !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://';
     }
 
     /**
-     * Devuelve el dominio del sitio.
+     * Return the site domain.
      *
      * @return string
      */
@@ -83,7 +79,7 @@ trait Request
     }
 
     /**
-     * Devuelve el dominio del sitio.
+     * Return the path relative to project.
      *
      * @return string
      */
@@ -93,17 +89,17 @@ trait Request
     }
 
     /**
-     * Devuelve la url del sitio.
+     * Return the URL this site.
      *
      * @return string
      */
     protected function getBaseUrl()
     {
-        return $this->getProtocol() . $this->getDomain() . $this->getPathProject();
+        return $this->getProtocol().$this->getDomain().$this->getPathProject();
     }
 
     /**
-     * Redirecciona a una direccion dentro del sitio actual.
+     * Redirecting to a URI in this site.
      *
      * @param string $to
      */

@@ -7,52 +7,47 @@ use Authenticate\Contracts\UserManager;
 use Authenticate\Contracts\Views;
 
 /**
- * Class Authorize
+ * Class Authorize.
  *
- * Verifica que alguien se encuentre logueado
- * o tenga autorizacion para acceder a
- * otros controladores o metodos.
- *
- * @package Authenticate\Core\Session
+ * Supplies the methods necessary for verify
+ * logging and authorization de acceso
+ * to a system.
  */
 abstract class Authorize implements Views
 {
     use AuthenticatesUsers;
 
     /**
-     * Mantiene la entidad/modelo con el
-     * cual se realizaran las busquedas
-     * de usuario.
+     * Capture a implemented UserManager interface.
      *
-     * @var mixed
+     * @var UserManager
      */
     protected static $entity = null;
 
     /**
-     * Campo a validar en el post incial.
+     * Field name for login.
      *
      * @var string
      */
     public $username = 'login';
 
     /**
-     * Define la ubicacion de la vista que contendra
-     * el formulario de login.
+     * Defines the path of the view with login form.
      *
      * @var string
      */
     public $loginView = 'login/login';
 
     /**
-     * Lugar a donde se redirecciona al usuario
-     * al terminar el login.
+     * Site to redirect after success login.
      *
      * @var string
      */
     public $redirectTo = '/';
 
     /**
-     * Controller constructor.
+     * It receive a implementation of UserManager in construct.
+     *
      * @param UserManager $user
      */
     public function __construct(UserManager $user)
@@ -63,8 +58,7 @@ abstract class Authorize implements Views
     }
 
     /**
-     * Configura la session bajo un conjunto de
-     * parametros especificos y la inicia.
+     * It settings and start the session.
      *
      * @return $this
      */
@@ -81,11 +75,11 @@ abstract class Authorize implements Views
     }
 
     /**
-     * Configura la entidad con la cual se
-     * realizaran las busquedas de
-     * usuario.
+     * It save a implementation the UserManager
+     * interface for multiple uses.
      *
      * @param UserManager $user
+     *
      * @return $this
      */
     public function setEntity(UserManager $user)
@@ -96,8 +90,7 @@ abstract class Authorize implements Views
     }
 
     /**
-     * Verifica que exista un usuario autenticado para
-     * continuar con el request.
+     * It verify if a user logged for continue request.
      *
      * @return void
      */
@@ -134,7 +127,8 @@ abstract class Authorize implements Views
 
         // Si no hay acceso despues de intentar logeo
         // enviamos a la vista de login.
-        if (!Session::auth())
+        if (!Session::auth()) {
             $this->showLoginForm();
+        }
     }
 }

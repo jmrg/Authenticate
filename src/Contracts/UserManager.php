@@ -9,8 +9,8 @@ interface UserManager
      *
      * @param string $fieldLoginUsername
      * @param string $user
+     *
      * @return UserManager
      */
     public static function getUserBylLoginUsername($fieldLoginUsername = null, $user = null);
-
 }
